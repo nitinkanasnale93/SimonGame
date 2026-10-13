@@ -1,90 +1,54 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simon Says | Memory Game</title>
+    <title>Simon Says - Memory Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <main class="game-shell">
 
-        <!-- Left panel -->
         <section class="intro-panel">
-            <div class="brand">
-                <span class="brand-icon">S</span>
-                <span>MEMORY CLUB</span>
-            </div>
+            <p class="brand">SIMON SAYS <span>★</span></p>
 
-            <p class="eyebrow">THE COLOUR CHALLENGE</p>
+            <h1>How good<br>is your<br><span>memory?</span></h1>
 
-            <h1>Simon<br><span>Says.</span></h1>
-
-            <p class="lead">
-                Watch the lights. Remember the order.
-                Repeat the pattern.
+            <p class="intro-text">
+                Watch the colours carefully and repeat
+                them in the same order.
             </p>
 
-            <div class="divider"></div>
-
-            <p class="section-label">HOW TO PLAY</p>
-
-            <div class="instruction">
-                <span class="step-number">01</span>
-                <div>
-                    <h2>Watch</h2>
-                    <p>Pay attention to the flashing lights.</p>
-                </div>
-            </div>
-
-            <div class="instruction">
-                <span class="step-number">02</span>
-                <div>
-                    <h2>Remember</h2>
-                    <p>Keep the colour order in your mind.</p>
-                </div>
-            </div>
-
-            <div class="instruction">
-                <span class="step-number">03</span>
-                <div>
-                    <h2>Repeat</h2>
-                    <p>Press the colours in the same order.</p>
-                </div>
+            <div class="how-to-play">
+                <h2>How to play</h2>
+                <p>01 &nbsp; Watch the flashing colours</p>
+                <p>02 &nbsp; Remember the sequence</p>
+                <p>03 &nbsp; Repeat it without mistakes</p>
             </div>
 
             <button id="startButton" class="start-button" type="button">
-                <span>Start Game</span>
-                <span class="start-arrow" aria-hidden="true">→</span>
+                Start Game
             </button>
 
-            <p class="footer-note">A little focus goes a long way.</p>
+            <p class="small-note">Made for curious minds.</p>
         </section>
 
-        <!-- Right panel -->
-        <section class="play-panel" aria-label="Simon game board">
-
-            <header class="panel-header">
+        <section class="play-panel">
+            <div class="game-heading">
                 <div>
-                    <p class="section-label">GAME BOARD</p>
-                    <h2 class="panel-title">Memory sequence</h2>
+                    <p class="small-label">YOUR TURN</p>
+                    <h2>Remember the pattern.</h2>
                 </div>
+                <span class="game-number">01 / GAME</span>
+            </div>
 
-                <span class="game-tag">
-                    <span class="status-dot"></span>
-                    SIMON
-                </span>
-            </header>
-
-            <div class="status-card">
-                <div class="status-icon">✳</div>
-                <div>
-                    <p class="status-label">YOUR PROGRESS</p>
-                    <h2 id="status" aria-live="polite">
-                        Press Start to begin!
-                    </h2>
-                </div>
+            <div class="status-area">
+                <span class="status-mark"></span>
+                <h2 id="status" aria-live="polite">
+                    Press Start to begin!
+                </h2>
             </div>
 
             <div class="button-container">
@@ -101,26 +65,11 @@
                     type="button" aria-label="Purple button">4</button>
             </div>
 
-            <footer class="board-footer">
-                <div class="colour-legend">
-                    <span class="legend-item">
-                        <i class="legend-dot dot-red"></i> Red
-                    </span>
-                    <span class="legend-item">
-                        <i class="legend-dot dot-yellow"></i> Yellow
-                    </span>
-                    <span class="legend-item">
-                        <i class="legend-dot dot-green"></i> Green
-                    </span>
-                    <span class="legend-item">
-                        <i class="legend-dot dot-purple"></i> Purple
-                    </span>
-                </div>
-
-                <p>4 COLOURS · 1 SEQUENCE</p>
-            </footer>
-
+            <p class="board-note">
+                One colour at a time. No guessing!
+            </p>
         </section>
+
     </main>
 
     <script src="script.js"></script>
