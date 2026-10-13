@@ -1,86 +1,132 @@
-let gameseq = [];
-let userseq = [];
 
-let started = false;
+const colors = ["red", "yellow", "green", "purple"];
+
+let gameSequence = [];
+let playerSequence = [];
 let level = 0;
 
-let h2 = document.querySelector("h2");
+let isPlaying = false;
+let acceptingInput = false;
+let roundToken = 0;
 
-let colors = ["red", "yellow", "green", "purple"];
+const statusHeading = document.getElementById("status");
+const startButton = document.getElementById("startButton");
+const buttons = document.querySelectorAll(".btn");
 
-document.addEventListener("keypress", function () {
-    if (started == false) {
-        console.log("key pressed");
-        started = true;
-        levelup();
-    }
-});
-
-function gameflash(btn){
-    btn.classList.add("flash");
-    setTimeout(function(){
-        btn.classList.remove("flash");
-    }, 400);
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function userflash(btn){
-    btn.classList.add("userflash");
-    setTimeout(function(){
-        btn.classList.remove("userflash");
-    }, 400);
+// Start or restart the game.
+startButton.addEventListener("click", startGame);
+
+async function startGame() {
+    roundToken++;
+    const token = roundToken;
+
+    gameSequence = [];
+    playerSequence = [];
+    level = 0;
+
+    isPlaying = true;
+    acceptingInput = false;
+
+    buttons.forEach(button => {
+        button.classList.remove("flash", "userflash");
+    });
+
+    statusHeading.classList.remove("game-over");
+    statusHeading.textContent = "Get ready...";
+    startButton.textContent = "Restart Game";
+
+    await wait(350);
+
+    if (token !== roundToken) return;
+
+    nextRound(token);
 }
 
-function levelup(){
-    userseq = [];
+// Add one colour and play the complete sequence.
+async function nextRound(token) {
+    if (!isPlaying || token !== roundToken) return;
+
     level++;
-    h2.innerText = "Level " + level;
+    playerSequence = [];
 
-    let randIdx = Math.floor(Math.random() * 4);
-    let randcolor = colors[randIdx];
-    let randbtn = document.querySelector(`.${randcolor}`);
-    gameseq.push(randcolor);
-    console.log(gameseq);
-    gameflash(randbtn);
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    gameSequence.push(colors[randomIndex]);
+
+    acceptingInput = false;
+    statusHeading.textContent = `Level ${level}: Watch the sequence`;
+
+    await wait(450);
+
+    for (const color of gameSequence) {
+        if (!isPlaying || token !== roundToken) return;
+
+        const button = document.getElementById(color);
+
+        button.classList.add("flash");
+        await wait(320);
+        button.classList.remove("flash");
+
+        await wait(180);
+    }
+
+    if (!isPlaying || token !== roundToken) return;
+
+    acceptingInput = true;
+    statusHeading.textContent = `Level ${level}: Your turn!`;
 }
 
-function checkans(idx){
-    console.log("current level: " + level);
+// Handle player input.
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        if (!isPlaying || !acceptingInput) return;
 
-    if(userseq[idx] === gameseq[idx]){
+        const selectedColor = button.id;
 
-        if(userseq.length === gameseq.length){
-            setTimeout(levelup, 1000);
+        button.classList.add("userflash");
+
+        setTimeout(() => {
+            button.classList.remove("userflash");
+        }, 180);
+
+        playerSequence.push(selectedColor);
+
+        const currentIndex = playerSequence.length - 1;
+
+        if (playerSequence[currentIndex] !== gameSequence[currentIndex]) {
+            gameOver();
+            return;
         }
 
-    } else {
-        h2.innerText = "Game Over! Press any key to restart.";
-        reset();
-    }
+        if (playerSequence.length === gameSequence.length) {
+            acceptingInput = false;
+            statusHeading.textContent = "Correct! Next round...";
+
+            const token = roundToken;
+
+            setTimeout(() => {
+                if (isPlaying && token === roundToken) {
+                    nextRound(token);
+                }
+            }, 700);
+        } else {
+            statusHeading.textContent = `Level ${level}: Keep going!`;
+        }
+    });
+});
+
+// Stop the game after an incorrect answer.
+function gameOver() {
+    isPlaying = false;
+    acceptingInput = false;
+    roundToken++;
+
+    statusHeading.classList.add("game-over");
+    statusHeading.textContent =
+        `Game Over! You reached Level ${level}. Play again?`;
+
+    startButton.textContent = "Play Again";
 }
-
-function reset(){
-    started = false;
-    gameseq = [];
-    userseq = [];
-    level = 0;
-}
-
-
-
-function btnpress() {
-    console.log(this);
-    let btn = this;
-    userflash(btn);
-
-    let usercolor = btn.getAttribute("id");
-    userseq.push(usercolor);
-    console.log(userseq);
-
-    checkans(userseq.length - 1);
-}
-
-let allbtns = document.querySelectorAll(".btn");
-for(btn of allbtns){
-    btn.addEventListener("click", btnpress);
-}
-
